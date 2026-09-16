@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  OPERATOR
+  SMO
+}
+
+enum DoctorNoteStatus {
+  PENDING
+  IN_REVIEW
+  APPROVED
+  REJECTED
+}
+
+model Employee {
+  id                   String       @id @default(uuid()) @db.Uuid
+  fullName             String
+  cpf                  String       @unique
+  email                String       @unique
+  phone                String       @unique
+  passwordHash         String
+  active               Boolean      @default(true)
+  role                 Role         @default(OPERATOR)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  submittedDoctorNotes DoctorNote[] @relation("EmployeeSubmittedDoctorNotes")
+  reviewedDoctorNotes  DoctorNote[] @relation("EmployeeReviewedDoctorNotes")
+}
+
+model DoctorNote {
+  id          String           @id @default(uuid()) @db.Uuid
+  issuedAt    DateTime
+  submittedAt DateTime
+  restDays    Int
+  restEndsAt  DateTime
+  employeeId  String           @db.Uuid
+  smoId       String?          @db.Uuid
+  status      DoctorNoteStatus @default(PENDING)
+  doctorName  String
+  crm         String
+  clinic      String
+  noteType    String
+  cid         String
+  observation String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  doctorNoteFile DoctorNoteFile[]
+
+  employee Employee  @relation("EmployeeSubmittedDoctorNotes", fields: [employeeId], references: [id], onDelete: Restrict)
+  smo      Employee? @relation("EmployeeReviewedDoctorNotes", fields: [smoId], references: [id], onDelete: Restrict)
+}
+
+model DoctorNoteFile {
+  id            String   @id @default(uuid()) @db.Uuid
+  originalFile  String
+  optimizedFile String
+  doctorNoteId  String   @db.Uuid
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  doctorNote DoctorNote @relation(fields: [doctorNoteId], references: [id], onDelete: Restrict)
+}
