@@ -32,6 +32,8 @@ model Employee {
   updatedAt            DateTime     @updatedAt
   submittedDoctorNotes DoctorNote[] @relation("EmployeeSubmittedDoctorNotes")
   reviewedDoctorNotes  DoctorNote[] @relation("EmployeeReviewedDoctorNotes")
+
+  @@map("employees")
 }
 
 model DoctorNote {
@@ -56,6 +58,8 @@ model DoctorNote {
 
   employee Employee  @relation("EmployeeSubmittedDoctorNotes", fields: [employeeId], references: [id], onDelete: Restrict)
   smo      Employee? @relation("EmployeeReviewedDoctorNotes", fields: [smoId], references: [id], onDelete: Restrict)
+
+  @@map("doctor_notes")
 }
 
 model DoctorNoteFile {
@@ -67,4 +71,6 @@ model DoctorNoteFile {
   updatedAt     DateTime @updatedAt
 
   doctorNote DoctorNote @relation(fields: [doctorNoteId], references: [id], onDelete: Restrict)
+
+  @@map("doctor_note_files")
 }
