@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { validateCPF } from "../utils/isValidCpf.js";
+import { cpfSchema } from "./common/cpf.schema.js";
 
 const createEmployeeSchema = z
   .object({
@@ -7,17 +7,7 @@ const createEmployeeSchema = z
       .string()
       .trim()
       .min(3, "The full name field must contain at least 3 characters"),
-    cpf: z
-      .string()
-      .trim()
-      .regex(
-        /^(?:\d{11}|\d{3}\.\d{3}\.\d{3}-\d{2})$/,
-        "The CPF field must contain 11 digits, with or without punctuation",
-      )
-      .transform((cpf) => cpf.replace(/\D/g, ""))
-      .refine((cpf) => validateCPF(cpf), {
-        message: "Invalid CPF",
-      }),
+    cpf: cpfSchema,
     email: z
       .string()
       .trim()
