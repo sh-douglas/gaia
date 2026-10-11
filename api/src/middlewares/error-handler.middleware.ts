@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { AppError } from "../errors/app.error.js";
 import { ZodError } from "zod";
+import { MulterError } from "multer";
 
 export function errorHandler(
   error: unknown,
@@ -28,6 +29,27 @@ export function errorHandler(
       code: "VALIDATION_ERROR",
       issues,
     });
+  }
+
+  if (error instanceof MulterError) {
+    switch (error.code) {
+      case "LIMIT_FILE_SIZE":
+        return res.status(413).json({
+          error: "The file size must be 10 megabytes or less.",
+          code: "FILE_TOO_LARGE",
+        });
+      case "LIMIT_UNEXPECTED_FILE":
+        return res.status(400).json({
+          error: "The file you uploaded is invalid.",
+          code: "INVALID_FILE_UPLOAD",
+        });
+      default:
+        return res.status(400).json({
+          error:
+            "An error occurred while uploading your file. Please try again later.",
+          code: "FILE_UPLOAD_ERROR",
+        });
+    }
   }
 
   console.error(error);
