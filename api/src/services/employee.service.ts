@@ -71,6 +71,26 @@ class EmployeeService {
 
     return publicEmployeeData;
   }
+
+  async findMe(employeeId: string) {
+    const employee = await employeeRepository.findById(employeeId);
+
+    if (!employee) {
+      throw new AppError("Employee not found.", 404, "EMPLOYEE_NOT_FOUND");
+    }
+
+    const employeePublicData = {
+      id: employee.id,
+      fullName: employee.fullName,
+      email: employee.email,
+      phone: employee.phone,
+      role: employee.role,
+      createdAt: employee.createdAt,
+      updatedAt: employee.updatedAt,
+    };
+
+    return employeePublicData;
+  }
 }
 
 export default new EmployeeService();

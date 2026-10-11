@@ -7,6 +7,12 @@ class EmployeeController {
 
     return res.status(201).json(employee);
   }
+
+  async findMe(req: Request, res: Response) {
+    const employee = await employeeService.findMe(req.employeeId);
+
+    return res.status(200).json(employee);
+  }
 }
 
 export default new EmployeeController();
