@@ -61,6 +61,7 @@ export async function ensureAuthenticated(
   }
 
   req.employeeId = employee.id;
+  req.employeeRole = employee.role;
 
   next();
 }
