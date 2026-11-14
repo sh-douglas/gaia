@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import doctorNoteService from "../services/doctor-note.service.js";
+import { doctorNoteParamsSchema } from "../validators/doctor-note.validator.js";
 
 class DoctorNoteController {
   async create(req: Request, res: Response) {
@@ -19,6 +20,16 @@ class DoctorNoteController {
     );
 
     return res.status(200).json(doctorNotes);
+  }
+
+  async findByIdAndEmployeeId(req: Request, res: Response) {
+    const parsedParams = doctorNoteParamsSchema.parse(req.params);
+    const doctorNote = await doctorNoteService.findByIdAndEmployeeId(
+      parsedParams.id,
+      req.employeeId,
+    );
+
+    return res.status(200).json(doctorNote);
   }
 }
 

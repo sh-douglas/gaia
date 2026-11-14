@@ -54,6 +54,15 @@ class DoctorNoteRepository {
       },
     });
   }
+
+  async findByIdAndEmployeeId(id: string, employeeId: string) {
+    return prisma.doctorNote.findUnique({
+      where: {
+        id,
+        employeeId,
+      },
+    });
+  }
 }
 
 export default new DoctorNoteRepository();

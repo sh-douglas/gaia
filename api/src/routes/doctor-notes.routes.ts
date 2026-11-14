@@ -21,4 +21,10 @@ router.get(
   doctorNoteController.findManyByEmployeeId,
 );
 
+router.get(
+  "/:id",
+  ensureAuthenticated,
+  doctorNoteController.findByIdAndEmployeeId,
+);
+
 export default router;

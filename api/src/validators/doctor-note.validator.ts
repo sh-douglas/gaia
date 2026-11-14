@@ -53,6 +53,16 @@ const createDoctorNoteSchema = z.object({
   observation: z.string().trim().optional(),
 });
 
-type CreateDoctorNoteInput = z.infer<typeof createDoctorNoteSchema>;
+const doctorNoteParamsSchema = z.object({
+  id: z.uuid(),
+});
 
-export { type CreateDoctorNoteInput, createDoctorNoteSchema };
+type CreateDoctorNoteInput = z.infer<typeof createDoctorNoteSchema>;
+type DoctorNoteParamsSchema = z.infer<typeof doctorNoteParamsSchema>;
+
+export {
+  type CreateDoctorNoteInput,
+  createDoctorNoteSchema,
+  type DoctorNoteParamsSchema,
+  doctorNoteParamsSchema,
+};

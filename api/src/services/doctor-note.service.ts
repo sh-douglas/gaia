@@ -72,6 +72,23 @@ class DoctorNoteService {
 
     return doctorNotes;
   }
+
+  async findByIdAndEmployeeId(id: string, employeeId: string) {
+    const doctorNote = await doctorNoteRepository.findByIdAndEmployeeId(
+      id,
+      employeeId,
+    );
+
+    if (!doctorNote) {
+      throw new AppError(
+        "Doctor note not found.",
+        404,
+        "DOCTOR_NOTE_NOT_FOUND",
+      );
+    }
+
+    return doctorNote;
+  }
 }
 
 export default new DoctorNoteService();
