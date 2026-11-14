@@ -2,6 +2,7 @@ import multer from "multer";
 import path from "node:path";
 import crypto from "node:crypto";
 import { AppError } from "../errors/app.error.js";
+import { DOCTOR_NOTE_ORIGINALS_DIR } from "./storage.js";
 
 const allowedMimeTypes = [
   "application/pdf",
@@ -12,10 +13,7 @@ const allowedMimeTypes = [
 
 const storage = multer.diskStorage({
   destination: function (_req, _file, cb) {
-    cb(
-      null,
-      path.resolve(process.cwd(), "storage", "doctor-notes", "originals"),
-    );
+    cb(null, DOCTOR_NOTE_ORIGINALS_DIR);
   },
   filename: function (_req, file, cb) {
     cb(null, crypto.randomUUID() + path.extname(file.originalname));

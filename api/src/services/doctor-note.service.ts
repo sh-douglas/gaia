@@ -3,6 +3,8 @@ import doctorNoteRepository from "../repositories/doctor-note.repository.js";
 import { AppError } from "../errors/app.error.js";
 import { createDoctorNoteSchema } from "../validators/doctor-note.validator.js";
 import { calculateBusinessDeadline } from "../utils/calculate-business-deadline.js";
+import { resolveDoctorNoteFilePath } from "../utils/resolve-doctor-note-file-path.js";
+import { validateDoctorNoteFile } from "../utils/validate-doctor-note-file.js";
 
 class DoctorNoteService {
   private calculateRestEndsAt(issuedAt: Date, restDays: number): Date {
@@ -88,6 +90,31 @@ class DoctorNoteService {
     }
 
     return doctorNote;
+  }
+
+  async findFileByIdAndDoctorNoteIdAndEmployeeId(
+    fileId: string,
+    doctorNoteId: string,
+    employeeId: string,
+  ) {
+    const doctorNoteFile =
+      await doctorNoteRepository.findFileByIdAndDoctorNoteIdAndEmployeeId(
+        fileId,
+        doctorNoteId,
+        employeeId,
+      );
+
+    if (!doctorNoteFile) {
+      throw new AppError(
+        "Doctor note file not found.",
+        404,
+        "DOCTOR_NOTE_FILE_NOT_FOUND",
+      );
+    }
+    const filePath = resolveDoctorNoteFilePath(doctorNoteFile.originalFile);
+    await validateDoctorNoteFile(filePath);
+
+    return { filePath };
   }
 }
 

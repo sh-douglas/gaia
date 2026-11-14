@@ -27,4 +27,10 @@ router.get(
   doctorNoteController.findByIdAndEmployeeId,
 );
 
+router.get(
+  "/:id/files/:fileId/download",
+  ensureAuthenticated,
+  doctorNoteController.downloadFile,
+);
+
 export default router;

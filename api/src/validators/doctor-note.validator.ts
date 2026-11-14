@@ -57,6 +57,11 @@ const doctorNoteParamsSchema = z.object({
   id: z.uuid(),
 });
 
+const downloadDoctorNoteFileParamsSchema = z.object({
+  id: z.uuid(),
+  fileId: z.uuid(),
+});
+
 type CreateDoctorNoteInput = z.infer<typeof createDoctorNoteSchema>;
 type DoctorNoteParamsSchema = z.infer<typeof doctorNoteParamsSchema>;
 
@@ -65,4 +70,5 @@ export {
   createDoctorNoteSchema,
   type DoctorNoteParamsSchema,
   doctorNoteParamsSchema,
+  downloadDoctorNoteFileParamsSchema,
 };

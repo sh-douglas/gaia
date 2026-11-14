@@ -8,11 +8,15 @@ export async function errorHandler(
   error: unknown,
   req: Request,
   res: Response,
-  _next: NextFunction,
+  next: NextFunction,
 ) {
   const files = Array.isArray(req.files) ? req.files : [];
   if (files.length > 0) {
     await cleanupUploadedFiles(files);
+  }
+
+  if (res.headersSent) {
+    next(error);
   }
 
   if (error instanceof AppError) {

@@ -61,6 +61,32 @@ class DoctorNoteRepository {
         id,
         employeeId,
       },
+      include: {
+        doctorNoteFile: {
+          select: {
+            id: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+  }
+
+  async findFileByIdAndDoctorNoteIdAndEmployeeId(
+    fileId: string,
+    doctorNoteId: string,
+    employeeId: string,
+  ) {
+    return prisma.doctorNoteFile.findFirst({
+      where: {
+        id: fileId,
+        doctorNoteId,
+        doctorNote: {
+          is: {
+            employeeId,
+          },
+        },
+      },
     });
   }
 }
