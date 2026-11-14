@@ -1,14 +1,20 @@
 import type { Request, Response, NextFunction } from "express";
-import { AppError } from "../errors/app.error.js";
 import { ZodError } from "zod";
 import { MulterError } from "multer";
+import { AppError } from "../errors/app.error.js";
+import { cleanupUploadedFiles } from "../utils/cleanup-uploaded-files.js";
 
-export function errorHandler(
+export async function errorHandler(
   error: unknown,
-  _req: Request,
+  req: Request,
   res: Response,
   _next: NextFunction,
 ) {
+  const files = Array.isArray(req.files) ? req.files : [];
+  if (files.length > 0) {
+    await cleanupUploadedFiles(files);
+  }
+
   if (error instanceof AppError) {
     return res.status(error.statusCode).json({
       error: error.message,

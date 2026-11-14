@@ -13,7 +13,7 @@ interface DoctorNoteCreateData {
   clinic: string;
   noteType: string;
   cid: string;
-  observation?: string;
+  observation?: string | undefined;
   employeeId: string;
   submittedAt: Date;
   restEndsAt: Date;
