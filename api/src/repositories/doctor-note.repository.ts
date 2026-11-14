@@ -43,6 +43,17 @@ class DoctorNoteRepository {
       },
     });
   }
+
+  async findManyByEmployeeId(employeeId: string) {
+    return prisma.doctorNote.findMany({
+      where: {
+        employeeId,
+      },
+      orderBy: {
+        submittedAt: "desc",
+      },
+    });
+  }
 }
 
 export default new DoctorNoteRepository();

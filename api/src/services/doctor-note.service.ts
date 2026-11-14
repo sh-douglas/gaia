@@ -65,6 +65,13 @@ class DoctorNoteService {
 
     return newDoctorNote;
   }
+
+  async findManyByEmployeeId(employeeId: string) {
+    const doctorNotes =
+      await doctorNoteRepository.findManyByEmployeeId(employeeId);
+
+    return doctorNotes;
+  }
 }
 
 export default new DoctorNoteService();

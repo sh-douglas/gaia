@@ -15,4 +15,10 @@ router.post(
   doctorNoteController.create,
 );
 
+router.get(
+  "/me",
+  ensureAuthenticated,
+  doctorNoteController.findManyByEmployeeId,
+);
+
 export default router;

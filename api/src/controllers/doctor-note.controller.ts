@@ -12,6 +12,14 @@ class DoctorNoteController {
 
     return res.status(201).json(doctorNote);
   }
+
+  async findManyByEmployeeId(req: Request, res: Response) {
+    const doctorNotes = await doctorNoteService.findManyByEmployeeId(
+      req.employeeId,
+    );
+
+    return res.status(200).json(doctorNotes);
+  }
 }
 
 export default new DoctorNoteController();
