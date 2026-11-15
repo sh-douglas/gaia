@@ -5,6 +5,7 @@ import { createDoctorNoteSchema } from "../validators/doctor-note.validator.js";
 import { calculateBusinessDeadline } from "../utils/calculate-business-deadline.js";
 import { resolveDoctorNoteFilePath } from "../utils/resolve-doctor-note-file-path.js";
 import { validateDoctorNoteFile } from "../utils/validate-doctor-note-file.js";
+import { validateUploadedDoctorNoteFiles } from "../utils/validate-uploaded-doctor-note-files.js";
 
 class DoctorNoteService {
   private calculateRestEndsAt(issuedAt: Date, restDays: number): Date {
@@ -27,6 +28,8 @@ class DoctorNoteService {
         "DOCTOR_NOTE_FILE_REQUIRED",
       );
     }
+    await validateUploadedDoctorNoteFiles(files);
+
     const parsedData = createDoctorNoteSchema.parse(data);
 
     const submittedAt = new Date();
