@@ -17,6 +17,7 @@ export async function errorHandler(
 
   if (res.headersSent) {
     next(error);
+    return;
   }
 
   if (error instanceof AppError) {
