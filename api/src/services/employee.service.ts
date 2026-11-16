@@ -5,6 +5,7 @@ import {
   type CreateEmployeeInput,
   createEmployeeSchema,
 } from "../validators/employee.validator.js";
+import { Prisma } from "../generated/prisma/client.js";
 
 class EmployeeService {
   async create(data: CreateEmployeeInput) {
@@ -57,7 +58,23 @@ class EmployeeService {
       passwordHash,
     };
 
-    const employee = await employeeRepository.create(employeeData);
+    let employee;
+
+    try {
+      employee = await employeeRepository.create(employeeData);
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        throw new AppError(
+          "Employee already exists.",
+          409,
+          "EMPLOYEE_ALREADY_EXISTS",
+        );
+      }
+      throw error;
+    }
 
     const publicEmployeeData = {
       id: employee.id,
