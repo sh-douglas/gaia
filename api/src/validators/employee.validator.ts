@@ -25,7 +25,10 @@ const phoneSchema = z
 
 const passwordSchema = z
   .string()
-  .min(6, "The password field must contain at least 6 characters");
+  .min(15, "The password field must contain at least 15 characters")
+  .refine((value) => Buffer.byteLength(value, "utf8") <= 72, {
+    message: "The password must not exceed 72 bytes.",
+  });
 
 const createEmployeeSchema = z
   .object({
@@ -34,9 +37,7 @@ const createEmployeeSchema = z
     email: emailSchema,
     phone: phoneSchema,
     password: passwordSchema,
-    confirmPassword: z
-      .string()
-      .min(6, "The confirm password field must contain at least 6 characters"),
+    confirmPassword: passwordSchema,
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "The passwords must be the same",
