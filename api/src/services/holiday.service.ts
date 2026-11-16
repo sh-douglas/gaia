@@ -1,6 +1,7 @@
 import { fetchHolidaysByYear } from "../integrations/brasil-api/holidays.client.js";
 import { holidaysFeiraDeSantana2026 } from "../config/holidays/feira-de-santana-2026.js";
 import { holidaysFeiraDeSantana2027 } from "../config/holidays/feira-de-santana-2027.js";
+import { calculateBusinessDeadline } from "../utils/calculate-business-deadline.js";
 import { AppError } from "../errors/app.error.js";
 
 class HolidayService {
@@ -39,8 +40,13 @@ class HolidayService {
   async getHolidaysForDeadline(issuedAt: Date) {
     const year = issuedAt.getFullYear();
     const holidays = await this.getHolidaysByYear(year);
+    const preliminaryDeadline = calculateBusinessDeadline(
+      issuedAt,
+      3,
+      holidays,
+    );
 
-    if (issuedAt.getMonth() === 11) {
+    if (preliminaryDeadline.getFullYear() !== year) {
       const nextYear = year + 1;
       const holidaysNextYear = await this.getHolidaysByYear(nextYear);
       holidays.push(...holidaysNextYear);
