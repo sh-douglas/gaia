@@ -1,6 +1,6 @@
-import { open } from "node:fs/promises";
-import { constants } from "node:fs";
-import { AppError } from "../errors/app.error.js";
+import { open } from 'node:fs/promises';
+import { constants } from 'node:fs';
+import { AppError } from '../errors/app.error.js';
 
 export async function openDoctorNoteFile(filePath: string) {
   let fileHandle;
@@ -12,13 +12,13 @@ export async function openDoctorNoteFile(filePath: string) {
   } catch (error) {
     if (
       error instanceof Error &&
-      "code" in error &&
-      (error.code === "ENOENT" || error.code === "ELOOP")
+      'code' in error &&
+      (error.code === 'ENOENT' || error.code === 'ELOOP')
     ) {
       throw new AppError(
-        "Doctor note file not found.",
+        'Doctor note file not found.',
         404,
-        "DOCTOR_NOTE_FILE_NOT_FOUND",
+        'DOCTOR_NOTE_FILE_NOT_FOUND',
       );
     }
 
@@ -29,9 +29,9 @@ export async function openDoctorNoteFile(filePath: string) {
 
     if (!stats.isFile()) {
       throw new AppError(
-        "Doctor note file not found.",
+        'Doctor note file not found.',
         404,
-        "DOCTOR_NOTE_FILE_NOT_FOUND",
+        'DOCTOR_NOTE_FILE_NOT_FOUND',
       );
     }
 

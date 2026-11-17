@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma.js";
+import { prisma } from '../lib/prisma.js';
 
 interface DoctorNoteFileCreateData {
   originalFile: string;
@@ -50,7 +50,7 @@ class DoctorNoteRepository {
         employeeId,
       },
       orderBy: {
-        submittedAt: "desc",
+        submittedAt: 'desc',
       },
     });
   }

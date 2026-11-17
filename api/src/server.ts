@@ -1,7 +1,7 @@
-import app from "./app.js";
-import { env } from "./config/env.js";
-import { mkdir } from "node:fs/promises";
-import { DOCTOR_NOTE_ORIGINALS_DIR } from "./config/storage.js";
+import app from './app.js';
+import { env } from './config/env.js';
+import { mkdir } from 'node:fs/promises';
+import { DOCTOR_NOTE_ORIGINALS_DIR } from './config/storage.js';
 
 const PORT = env.PORT;
 

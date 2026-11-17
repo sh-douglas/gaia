@@ -1,5 +1,5 @@
-import type { Request, Response } from "express";
-import authService from "../services/auth.service.js";
+import type { Request, Response } from 'express';
+import authService from '../services/auth.service.js';
 
 class AuthController {
   async signIn(req: Request, res: Response) {

@@ -1,12 +1,12 @@
-import type { Request, Response } from "express";
-import doctorNoteService from "../services/doctor-note.service.js";
+import type { Request, Response } from 'express';
+import doctorNoteService from '../services/doctor-note.service.js';
 import {
   doctorNoteParamsSchema,
   downloadDoctorNoteFileParamsSchema,
-} from "../validators/doctor-note.validator.js";
-import { openDoctorNoteFile } from "../utils/open-doctor-notes-files.js";
-import { pipeline } from "node:stream/promises";
-import path from "node:path";
+} from '../validators/doctor-note.validator.js';
+import { openDoctorNoteFile } from '../utils/open-doctor-notes-files.js';
+import { pipeline } from 'node:stream/promises';
+import path from 'node:path';
 
 class DoctorNoteController {
   async create(req: Request, res: Response) {
@@ -52,7 +52,7 @@ class DoctorNoteController {
     const stream = fileHandle.createReadStream();
     const extension = path.extname(doctorNoteFile.filePath);
     res.attachment(`atestado${extension}`);
-    res.setHeader("Cache-Control", "no-store");
+    res.setHeader('Cache-Control', 'no-store');
     await pipeline(stream, res);
   }
 }

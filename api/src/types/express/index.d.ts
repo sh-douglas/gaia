@@ -1,4 +1,4 @@
-import type { Role } from "../../generated/prisma/enums.ts";
+import type { Role } from '../../generated/prisma/enums.ts';
 
 declare global {
   namespace Express {
@@ -9,5 +9,3 @@ declare global {
     }
   }
 }
-
-export {};
