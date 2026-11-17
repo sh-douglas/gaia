@@ -1,10 +1,10 @@
-import type { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
-import { env } from "../config/env.js";
-import { AppError } from "../errors/app.error.js";
-import employeeRepository from "../repositories/employee.repository.js";
-import authSessionRepository from "../repositories/auth-session.repository.js";
-import { z } from "zod";
+import type { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { env } from '../config/env.js';
+import { AppError } from '../errors/app.error.js';
+import employeeRepository from '../repositories/employee.repository.js';
+import authSessionRepository from '../repositories/auth-session.repository.js';
+import { z } from 'zod';
 
 export async function ensureAuthenticated(
   req: Request,
@@ -15,42 +15,42 @@ export async function ensureAuthenticated(
   let decoded;
 
   if (!header) {
-    next(new AppError("Unauthorized.", 401, "UNAUTHORIZED_ACCESS"));
+    next(new AppError('Unauthorized.', 401, 'UNAUTHORIZED_ACCESS'));
     return;
   }
 
-  const [scheme, token] = header.split(" ");
+  const [scheme, token] = header.split(' ');
 
-  if (scheme !== "Bearer" || !token) {
-    next(new AppError("Unauthorized.", 401, "UNAUTHORIZED_ACCESS"));
+  if (scheme !== 'Bearer' || !token) {
+    next(new AppError('Unauthorized.', 401, 'UNAUTHORIZED_ACCESS'));
     return;
   }
 
   try {
     decoded = jwt.verify(token, env.JWT_SECRET);
 
-    if (typeof decoded === "string") {
-      next(new AppError("Unauthorized.", 401, "UNAUTHORIZED_ACCESS"));
+    if (typeof decoded === 'string') {
+      next(new AppError('Unauthorized.', 401, 'UNAUTHORIZED_ACCESS'));
       return;
     }
   } catch {
-    next(new AppError("Unauthorized.", 401, "UNAUTHORIZED_ACCESS"));
+    next(new AppError('Unauthorized.', 401, 'UNAUTHORIZED_ACCESS'));
     return;
   }
 
   if (
-    typeof decoded.sub !== "string" ||
+    typeof decoded.sub !== 'string' ||
     !z.uuid().safeParse(decoded.sub).success
   ) {
-    next(new AppError("Unauthorized.", 401, "UNAUTHORIZED_ACCESS"));
+    next(new AppError('Unauthorized.', 401, 'UNAUTHORIZED_ACCESS'));
     return;
   }
 
   if (
-    typeof decoded.sid !== "string" ||
+    typeof decoded.sid !== 'string' ||
     !z.uuid().safeParse(decoded.sid).success
   ) {
-    next(new AppError("Unauthorized.", 401, "UNAUTHORIZED_ACCESS"));
+    next(new AppError('Unauthorized.', 401, 'UNAUTHORIZED_ACCESS'));
     return;
   }
 
@@ -60,36 +60,36 @@ export async function ensureAuthenticated(
   const authSession = await authSessionRepository.findById(sid);
 
   if (authSession === null) {
-    next(new AppError("Unauthorized.", 401, "UNAUTHORIZED_ACCESS"));
+    next(new AppError('Unauthorized.', 401, 'UNAUTHORIZED_ACCESS'));
     return;
   }
 
   if (!employee) {
-    next(new AppError("Unauthorized.", 401, "UNAUTHORIZED_ACCESS"));
+    next(new AppError('Unauthorized.', 401, 'UNAUTHORIZED_ACCESS'));
     return;
   }
 
   if (authSession.employeeId !== sub) {
-    next(new AppError("Unauthorized.", 401, "UNAUTHORIZED_ACCESS"));
+    next(new AppError('Unauthorized.', 401, 'UNAUTHORIZED_ACCESS'));
     return;
   }
 
   if (authSession.revokedAt !== null) {
-    next(new AppError("Unauthorized.", 401, "UNAUTHORIZED_ACCESS"));
+    next(new AppError('Unauthorized.', 401, 'UNAUTHORIZED_ACCESS'));
     return;
   }
 
   if (authSession.expiresAt.getTime() <= Date.now()) {
-    next(new AppError("Unauthorized.", 401, "UNAUTHORIZED_ACCESS"));
+    next(new AppError('Unauthorized.', 401, 'UNAUTHORIZED_ACCESS'));
     return;
   }
 
   if (employee.active === false) {
     next(
       new AppError(
-        "This employee account is inactive.",
+        'This employee account is inactive.',
         403,
-        "EMPLOYEE_INACTIVE",
+        'EMPLOYEE_INACTIVE',
       ),
     );
     return;

@@ -1,11 +1,11 @@
-import bcrypt from "bcryptjs";
-import { AppError } from "../errors/app.error.js";
-import employeeRepository from "../repositories/employee.repository.js";
+import bcrypt from 'bcryptjs';
+import { AppError } from '../errors/app.error.js';
+import employeeRepository from '../repositories/employee.repository.js';
 import {
   type CreateEmployeeInput,
   createEmployeeSchema,
-} from "../validators/employee.validator.js";
-import { Prisma } from "../generated/prisma/client.js";
+} from '../validators/employee.validator.js';
+import { Prisma } from '../generated/prisma/client.js';
 
 class EmployeeService {
   async create(data: CreateEmployeeInput) {
@@ -17,9 +17,9 @@ class EmployeeService {
 
     if (existingEmployeeCpf) {
       throw new AppError(
-        "An employee with this CPF already exists.",
+        'An employee with this CPF already exists.',
         409,
-        "EMPLOYEE_CPF_ALREADY_EXISTS",
+        'EMPLOYEE_CPF_ALREADY_EXISTS',
       );
     }
 
@@ -29,9 +29,9 @@ class EmployeeService {
 
     if (existingEmployeeEmail) {
       throw new AppError(
-        "An employee with this email already exists.",
+        'An employee with this email already exists.',
         409,
-        "EMPLOYEE_EMAIL_ALREADY_EXISTS",
+        'EMPLOYEE_EMAIL_ALREADY_EXISTS',
       );
     }
 
@@ -41,9 +41,9 @@ class EmployeeService {
 
     if (existingEmployeePhone) {
       throw new AppError(
-        "An employee with this phone already exists.",
+        'An employee with this phone already exists.',
         409,
-        "EMPLOYEE_PHONE_ALREADY_EXISTS",
+        'EMPLOYEE_PHONE_ALREADY_EXISTS',
       );
     }
 
@@ -65,12 +65,12 @@ class EmployeeService {
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === "P2002"
+        error.code === 'P2002'
       ) {
         throw new AppError(
-          "Employee already exists.",
+          'Employee already exists.',
           409,
-          "EMPLOYEE_ALREADY_EXISTS",
+          'EMPLOYEE_ALREADY_EXISTS',
         );
       }
       throw error;
@@ -93,7 +93,7 @@ class EmployeeService {
     const employee = await employeeRepository.findById(employeeId);
 
     if (!employee) {
-      throw new AppError("Employee not found.", 404, "EMPLOYEE_NOT_FOUND");
+      throw new AppError('Employee not found.', 404, 'EMPLOYEE_NOT_FOUND');
     }
 
     const employeePublicData = {

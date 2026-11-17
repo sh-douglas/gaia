@@ -9,8 +9,8 @@ export function calculateBusinessDeadline(
     const dayOfMonth = issuedAtCopy.getDate();
     issuedAtCopy.setDate(dayOfMonth + 1);
     const year = issuedAtCopy.getFullYear();
-    const month = String(issuedAtCopy.getMonth() + 1).padStart(2, "0");
-    const day = String(issuedAtCopy.getDate()).padStart(2, "0");
+    const month = String(issuedAtCopy.getMonth() + 1).padStart(2, '0');
+    const day = String(issuedAtCopy.getDate()).padStart(2, '0');
 
     const formattedDate = `${year}-${month}-${day}`;
     const isHoliday = holidays.includes(formattedDate);

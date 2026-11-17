@@ -1,10 +1,10 @@
-import holidayService from "./holiday.service.js";
-import doctorNoteRepository from "../repositories/doctor-note.repository.js";
-import { AppError } from "../errors/app.error.js";
-import { createDoctorNoteSchema } from "../validators/doctor-note.validator.js";
-import { calculateBusinessDeadline } from "../utils/calculate-business-deadline.js";
-import { resolveDoctorNoteFilePath } from "../utils/resolve-doctor-note-file-path.js";
-import { validateUploadedDoctorNoteFiles } from "../utils/validate-uploaded-doctor-note-files.js";
+import holidayService from './holiday.service.js';
+import doctorNoteRepository from '../repositories/doctor-note.repository.js';
+import { AppError } from '../errors/app.error.js';
+import { createDoctorNoteSchema } from '../validators/doctor-note.validator.js';
+import { calculateBusinessDeadline } from '../utils/calculate-business-deadline.js';
+import { resolveDoctorNoteFilePath } from '../utils/resolve-doctor-note-file-path.js';
+import { validateUploadedDoctorNoteFiles } from '../utils/validate-uploaded-doctor-note-files.js';
 
 class DoctorNoteService {
   private calculateRestEndsAt(issuedAt: Date, restDays: number): Date {
@@ -22,9 +22,9 @@ class DoctorNoteService {
   ) {
     if (files.length === 0) {
       throw new AppError(
-        "At least one file is required",
+        'At least one file is required',
         400,
-        "DOCTOR_NOTE_FILE_REQUIRED",
+        'DOCTOR_NOTE_FILE_REQUIRED',
       );
     }
     await validateUploadedDoctorNoteFiles(files);
@@ -43,9 +43,9 @@ class DoctorNoteService {
 
     if (submittedAt > limitDate) {
       throw new AppError(
-        "The doctor note submission deadline has expired.",
+        'The doctor note submission deadline has expired.',
         400,
-        "DOCTOR_NOTE_DEADLINE_EXPIRED",
+        'DOCTOR_NOTE_DEADLINE_EXPIRED',
       );
     }
 
@@ -53,11 +53,9 @@ class DoctorNoteService {
       parsedData.issuedAt,
       parsedData.restDays,
     );
-    const doctorNoteFiles = files.map((file) => {
-      return {
-        originalFile: file.filename,
-      };
-    });
+    const doctorNoteFiles = files.map((file) => ({
+      originalFile: file.filename,
+    }));
 
     const newDoctorNote = await doctorNoteRepository.create({
       ...parsedData,
@@ -85,9 +83,9 @@ class DoctorNoteService {
 
     if (!doctorNote) {
       throw new AppError(
-        "Doctor note not found.",
+        'Doctor note not found.',
         404,
-        "DOCTOR_NOTE_NOT_FOUND",
+        'DOCTOR_NOTE_NOT_FOUND',
       );
     }
 
@@ -108,9 +106,9 @@ class DoctorNoteService {
 
     if (!doctorNoteFile) {
       throw new AppError(
-        "Doctor note file not found.",
+        'Doctor note file not found.',
         404,
-        "DOCTOR_NOTE_FILE_NOT_FOUND",
+        'DOCTOR_NOTE_FILE_NOT_FOUND',
       );
     }
     const filePath = resolveDoctorNoteFilePath(doctorNoteFile.originalFile);

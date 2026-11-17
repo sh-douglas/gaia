@@ -12,7 +12,7 @@ export async function fetchHolidaysByYear(
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch holidays from BrasilAPI.");
+    throw new Error('Failed to fetch holidays from BrasilAPI.');
   }
 
   const holidays = await response.json();

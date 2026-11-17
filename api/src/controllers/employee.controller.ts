@@ -1,5 +1,5 @@
-import type { Request, Response } from "express";
-import employeeService from "../services/employee.service.js";
+import type { Request, Response } from 'express';
+import employeeService from '../services/employee.service.js';
 
 class EmployeeController {
   async create(req: Request, res: Response) {
