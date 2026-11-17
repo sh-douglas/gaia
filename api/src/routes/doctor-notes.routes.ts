@@ -18,18 +18,21 @@ router.post(
 router.get(
   "/me",
   ensureAuthenticated,
+  allowedRoles(Role.OPERATOR),
   doctorNoteController.findManyByEmployeeId,
 );
 
 router.get(
   "/:id",
   ensureAuthenticated,
+  allowedRoles(Role.OPERATOR),
   doctorNoteController.findByIdAndEmployeeId,
 );
 
 router.get(
   "/:id/files/:fileId/download",
   ensureAuthenticated,
+  allowedRoles(Role.OPERATOR),
   doctorNoteController.downloadFile,
 );
 
