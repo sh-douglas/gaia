@@ -15,11 +15,22 @@
   "license": "MIT",
   "author": "Douglas",
   "type": "module",
-  "scripts": {
+    "scripts": {
     "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
     "build": "tsc",
     "check": "tsc --noEmit",
-    "postinstall": "prisma skills sync || exit 0"
+    "lint": "oxlint src",
+    "lint:fix": "oxlint src --fix",
+    "format": "oxfmt src",
+    "format:check": "oxfmt --check src",
+    "validate": "npm run check && npm run lint && npm run format:check",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:status": "prisma migrate status",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
