@@ -14,7 +14,7 @@ const envSchema = z.object({
   JWT_SECRET: z
     .string()
     .trim()
-    .min(16, 'JWT_SECRET must be at least 16 characters long'),
+    .min(32, 'JWT_SECRET must be at least 32 characters long'),
   JWT_EXPIRES_IN: z.enum(['15m', '30m']),
 });
 
