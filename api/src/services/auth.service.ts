@@ -7,6 +7,7 @@ import {
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
+import authSessionRepository from "../repositories/auth-session.repository.js";
 
 class AuthService {
   async signIn(data: SignInInput) {
@@ -35,9 +36,17 @@ class AuthService {
       );
     }
 
+    const expirationMinutes = env.JWT_EXPIRES_IN === "15m" ? 15 : 30;
+    const expiresAt = new Date(Date.now() + expirationMinutes * 60 * 1000);
+    const authSession = await authSessionRepository.create({
+      employeeId: employee.id,
+      expiresAt,
+    });
+
     const token = jwt.sign(
       {
         sub: employee.id,
+        sid: authSession.id,
       },
       env.JWT_SECRET,
       {
@@ -59,6 +68,13 @@ class AuthService {
       employeeData,
       token,
     };
+  }
+
+  async signOut(employeeId: string, authSessionId: string) {
+    await authSessionRepository.revokeByIdAndEmployeeId(
+      authSessionId,
+      employeeId,
+    );
   }
 }
 
