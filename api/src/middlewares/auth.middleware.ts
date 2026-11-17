@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
 import { AppError } from "../errors/app.error.js";
 import employeeRepository from "../repositories/employee.repository.js";
+import authSessionRepository from "../repositories/auth-session.repository.js";
 
 export async function ensureAuthenticated(
   req: Request,
@@ -41,10 +42,37 @@ export async function ensureAuthenticated(
     return;
   }
 
+  if (typeof decoded.sid !== "string") {
+    next(new AppError("Invalid or expired token!", 401, "UNAUTHORIZED_ACCESS"));
+    return;
+  }
+
   const sub = decoded.sub;
+  const sid = decoded.sid;
   const employee = await employeeRepository.findById(sub);
+  const authSession = await authSessionRepository.findById(sid);
+
+  if (authSession === null) {
+    next(new AppError("Invalid or expired token!", 401, "UNAUTHORIZED_ACCESS"));
+    return;
+  }
 
   if (!employee) {
+    next(new AppError("Invalid or expired token!", 401, "UNAUTHORIZED_ACCESS"));
+    return;
+  }
+
+  if (authSession.employeeId !== sub) {
+    next(new AppError("Invalid or expired token!", 401, "UNAUTHORIZED_ACCESS"));
+    return;
+  }
+
+  if (authSession.revokedAt !== null) {
+    next(new AppError("Invalid or expired token!", 401, "UNAUTHORIZED_ACCESS"));
+    return;
+  }
+
+  if (authSession.expiresAt.getTime() <= Date.now()) {
     next(new AppError("Invalid or expired token!", 401, "UNAUTHORIZED_ACCESS"));
     return;
   }
@@ -62,6 +90,7 @@ export async function ensureAuthenticated(
 
   req.employeeId = employee.id;
   req.employeeRole = employee.role;
+  req.authSessionId = authSession.id;
 
   next();
 }

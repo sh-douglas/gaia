@@ -21,18 +21,19 @@ enum DoctorNoteStatus {
 }
 
 model Employee {
-  id                   String       @id @default(uuid()) @db.Uuid
+  id                   String        @id @default(uuid()) @db.Uuid
   fullName             String
-  cpf                  String       @unique
-  email                String       @unique
-  phone                String       @unique
+  cpf                  String        @unique
+  email                String        @unique
+  phone                String        @unique
   passwordHash         String
-  active               Boolean      @default(true)
-  role                 Role         @default(OPERATOR)
-  createdAt            DateTime     @default(now())
-  updatedAt            DateTime     @updatedAt
-  submittedDoctorNotes DoctorNote[] @relation("EmployeeSubmittedDoctorNotes")
-  reviewedDoctorNotes  DoctorNote[] @relation("EmployeeReviewedDoctorNotes")
+  active               Boolean       @default(true)
+  role                 Role          @default(OPERATOR)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  authSessions         AuthSession[]
+  submittedDoctorNotes DoctorNote[]  @relation("EmployeeSubmittedDoctorNotes")
+  reviewedDoctorNotes  DoctorNote[]  @relation("EmployeeReviewedDoctorNotes")
 
   @@map("employees")
 }
@@ -74,4 +75,16 @@ model DoctorNoteFile {
   doctorNote DoctorNote @relation(fields: [doctorNoteId], references: [id], onDelete: Restrict)
 
   @@map("doctor_note_files")
+}
+
+model AuthSession {
+  id         String    @id @default(uuid()) @db.Uuid
+  employeeId String    @db.Uuid
+  createdAt  DateTime  @default(now())
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  employee   Employee  @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+
+  @@index([employeeId])
+  @@map("auth_sessions")
 }
