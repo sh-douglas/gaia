@@ -3,19 +3,19 @@
   "version": "0.0.1",
   "description": "Desenvolvendo um sistema de Anexos de Atestado melhor que o da empresa na qual eu trabalho.",
   "keywords": [
+    "Api",
+    "BcryptJs",
     "Docker",
     "Express",
-    "TypeScript",
-    "Node.js",
-    "BcryptJs",
     "JWT",
-    "Zod",
-    "Api"
+    "Node.js",
+    "TypeScript",
+    "Zod"
   ],
   "license": "MIT",
   "author": "Douglas",
   "type": "module",
-    "scripts": {
+  "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc",
@@ -32,18 +32,6 @@
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio"
   },
-  "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/jsonwebtoken": "^9.0.10",
-    "@types/multer": "^2.3.0",
-    "@types/node": "^26.5.1",
-    "@types/pg": "^8.23.1",
-    "oxfmt": "^0.79.0",
-    "oxlint": "^1.94.0",
-    "prisma": "^7.10.0",
-    "tsx": "^4.23.13",
-    "typescript": "^7.0.2"
-  },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
@@ -56,5 +44,17 @@
     "multer": "^2.4.0",
     "pg": "^8.23.0",
     "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.3.0",
+    "@types/node": "^26.5.1",
+    "@types/pg": "^8.23.1",
+    "oxfmt": "^0.79.0",
+    "oxlint": "^1.94.0",
+    "prisma": "^7.10.0",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
   }
 }
