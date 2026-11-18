@@ -52,6 +52,26 @@ export async function errorHandler(
           error: 'The file you uploaded is invalid.',
           code: 'INVALID_FILE_UPLOAD',
         });
+      case 'LIMIT_FILE_COUNT':
+        return res.status(400).json({
+          error: 'The limit of 5 files per upload has been exceeded.',
+          code: 'TOO_MANY_FILES',
+        });
+      case 'LIMIT_FIELD_COUNT':
+        return res.status(400).json({
+          error: 'The limit of 8 fields per request has been exceeded.',
+          code: 'TOO_MANY_FIELDS',
+        });
+      case 'LIMIT_PART_COUNT':
+        return res.status(400).json({
+          error: 'The limit of 13 parts per request has been exceeded.',
+          code: 'TOO_MANY_PARTS',
+        });
+      case 'LIMIT_FIELD_VALUE':
+        return res.status(413).json({
+          error: 'The field value exceeds the allowed size of 16 KiB.',
+          code: 'FIELD_TOO_LARGE',
+        });
       default:
         return res.status(400).json({
           error:
