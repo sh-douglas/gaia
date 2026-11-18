@@ -1,44 +1,34 @@
 import { fileTypeFromFile } from 'file-type';
 import { AppError } from '../errors/app.error.js';
 import path from 'node:path';
+import {
+  allowedDoctorNoteExtensions,
+  allowedDoctorNoteMimeTypes,
+} from '../config/doctor-note-file-types.js';
 
 export async function validateUploadedDoctorNoteFiles(
   files: Express.Multer.File[],
 ) {
-  const allowedMimeTypes = new Set<string>([
-    'application/pdf',
-    'image/jpeg',
-    'image/png',
-    'image/webp',
-  ]);
-
-  const allowedMap: Record<string, string[]> = {
-    'application/pdf': ['.pdf'],
-    'image/jpeg': ['.jpg', '.jpeg'],
-    'image/png': ['.png'],
-    'image/webp': ['.webp'],
-  };
-
   for (const file of files) {
     // oxlint-disable-next-line no-await-in-loop
     const allowed = await fileTypeFromFile(file.path);
 
     if (
       allowed === undefined ||
-      !allowedMimeTypes.has(allowed.mime) ||
+      !allowedDoctorNoteMimeTypes.has(allowed.mime) ||
       allowed.mime !== file.mimetype
     ) {
       throw new AppError('File type not allowed.', 400, 'INVALID_FILE_TYPE');
     }
 
-    const extension = path.extname(file.filename).toLocaleLowerCase();
-    const allowedExtesions = allowedMap[allowed.mime];
+    const extension = path.extname(file.filename).toLowerCase();
+    const allowedExtensions = allowedDoctorNoteExtensions[allowed.mime];
 
-    if (allowedExtesions === undefined) {
+    if (allowedExtensions === undefined) {
       throw new AppError('File type not allowed.', 400, 'INVALID_FILE_TYPE');
     }
 
-    if (!allowedExtesions.includes(extension)) {
+    if (!allowedExtensions.includes(extension)) {
       throw new AppError('File type not allowed.', 400, 'INVALID_FILE_TYPE');
     }
   }
