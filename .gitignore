@@ -3,3 +3,4 @@ node_modules
 
 /api/src/generated/prisma
 /api/storage/
+/api/dist
